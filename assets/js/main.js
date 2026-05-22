@@ -8,6 +8,28 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Dropdown click toggle (mobile-friendly)
+  document.querySelectorAll(".dropdown-toggle").forEach((dt) => {
+    dt.addEventListener("click", (e) => {
+      // On desktop with hover support, let CSS hover handle it — only toggle on touch/mobile
+      if (window.matchMedia("(pointer: coarse)").matches || window.innerWidth <= 900) {
+        e.stopPropagation();
+        const parent = dt.closest(".dropdown");
+        const was = parent.classList.contains("active");
+        // Close sibling dropdowns
+        parent.closest(".nav-links").querySelectorAll(".dropdown.active").forEach((d) => d.classList.remove("active"));
+        if (!was) parent.classList.add("active");
+      }
+    });
+  });
+
+  // Close dropdowns when clicking outside
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".dropdown")) {
+      document.querySelectorAll(".dropdown.active").forEach((d) => d.classList.remove("active"));
+    }
+  });
+
   const yearEls = document.querySelectorAll("[data-current-year]");
   yearEls.forEach((el) => {
     el.textContent = new Date().getFullYear();
